@@ -1,0 +1,27 @@
+# PromptForge — copy to config.toml and adjust for your machine
+freecad_mode = "headless"
+vision_capture = "auto"
+background_freecad = true
+
+# AI keys are stored in jobs/secrets.db — use Settings in the app or POST /api/settings
+ai_provider = "ollama_cloud"
+api_url = "https://ollama.com"
+model = "qwen3-vl:235b-instruct"
+
+grok_image_model = "grok-imagine-image"
+image_gen_enabled = "false"
+
+# 3D printer (Creality)
+printer_brand = "Creality"
+printer_model = "K2"
+printer_nozzle = "0.4"
+filament_profile = "Creality Generic PLA @K2-all"
+printer_ip = "192.168.1.100"
+printer_gcode_storage = "/mnt/UDISK/printer_data/gcodes"
+printer_enable_self_test = false
+slice_format = "auto"
+slice_auto_orient = true
+slice_auto_arrange = true
+slice_ensure_on_bed = true
+slice_allow_rotations = true
+gcode_dir = "C:\\path\\to\\gcode"

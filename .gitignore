@@ -1,0 +1,37 @@
+# Dependencies & builds
+**/node_modules/
+**/dist/
+**/dist-electron/
+**/release/
+**/*.tsbuildinfo
+**/*.egg-info/
+**/__pycache__/
+**/*.pyc
+
+# Secrets & local config
+**/.env
+**/.env.*
+freecad-studio/jobs/secrets.db
+freecad-studio/config.toml
+
+# Job runtime data
+freecad-studio/jobs/*.json
+freecad-studio/jobs/_render_test/
+
+# Local batch / scratch
+batch/
+_cli-tmp/
+*.zip
+
+# Large upstream clones (not PromptForge source)
+CLI-Anything-main/
+freecad-mcp-main/
+
+# OS / logs
+.DS_Store
+Thumbs.db
+*.log
+
+# Personal one-off scripts at repo root
+freecad_boat*.py
+mcp_test_freecad.py

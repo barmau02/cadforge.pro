@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PromptForge — Concept to Print</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="brand">
+        <div class="logo">✦</div>
+        <div>
+          <h1>PromptForge</h1>
+          <p>Concept to print — AI design, slice, and send to your printer</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="services-strip" id="servicesStrip"></div>
+        <button class="btn primary small" id="startAllBtn" data-action="start-all">Start All Services</button>
+        <div class="status-pill" id="rpcStatus"><span class="dot"></span><span id="rpcLabel">…</span></div>
+        <a class="link-btn" href="http://127.0.0.1:8787">127.0.0.1:8787</a>
+      </div>
+    </header>
+
+    <!-- WORKFLOW PROGRESS -->
+    <section class="workflow-panel panel">
+      <div class="workflow-head">
+        <div>
+          <h2>Workflow</h2>
+          <p class="workflow-sub" id="progressLabel">Loading progress…</p>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+          <span class="progress-pct" id="progressPct">0%</span>
+        </div>
+      </div>
+
+      <div class="you-are-here" id="youAreHere">
+        <span class="here-label">You are here</span>
+        <strong id="currentStepTitle">—</strong>
+        <span id="currentStepDetail">—</span>
+        <button class="btn primary small" id="currentStepBtn" data-action="" hidden>Do this step</button>
+      </div>
+
+      <div class="step-track" id="stepTrack"></div>
+    </section>
+
+    <section class="prompt-hero panel">
+      <h2>What do you want to build?</h2>
+      <textarea id="promptInput" rows="2" placeholder="Describe anything: boat, bracket, gear, vase…"></textarea>
+      <div class="chip-row">
+        <button class="chip" data-prompt="A toy boat with hull, deck, small cabin, and rudder, 200mm long">Boat</button>
+        <button class="chip" data-prompt="A phone stand angled at 60 degrees, 80mm wide">Phone stand</button>
+        <button class="chip" data-prompt="A simple gear with 20 teeth, 40mm diameter, 8mm thick">Gear</button>
+        <button class="chip" data-prompt="A wall hook for coats, 60mm tall, with two screw holes">Wall hook</button>
+      </div>
+      <div class="prompt-actions">
+        <button class="btn primary large" data-action="prompt-build">Build it in FreeCAD</button>
+        <button class="btn secondary" data-action="start-all">Start All Services</button>
+        <button class="btn ghost" data-action="export-stl">Export STL</button>
+        <button class="btn secondary" data-action="reslice-gcode" id="resliceBtn">Re-slice (fresh CAD)</button>
+        <button class="btn accent" data-action="open-slicer" id="slicerBtn">Creality Print</button>
+        <button class="btn primary" data-action="send-print" id="sendPrintBtn">Send to Printer (WiFi)</button>
+        <button class="btn ghost" id="discoverPrinterBtn">Find Printer on WiFi</button>
+      </div>
+      <div class="ai-hint" id="aiHint"></div>
+    </section>
+
+    <main class="grid">
+      <section class="panel code-panel">
+        <div class="panel-head">
+          <h2>Generated Python</h2>
+          <button class="btn small primary" data-action="run-code">Run code</button>
+        </div>
+        <textarea id="codeEditor" spellcheck="false"># Python appears here after you prompt</textarea>
+      </section>
+
+      <div class="right-stack">
+        <section class="panel preview">
+          <div class="panel-head">
+            <h2>Preview</h2>
+            <button class="btn small ghost" data-action="screenshot">Refresh</button>
+          </div>
+          <div class="preview-box" id="previewBox">
+            <span class="placeholder">Complete step 4 to see preview</span>
+            <img id="previewImg" alt="FreeCAD view" hidden />
+          </div>
+        </section>
+
+        <section class="panel camera-panel">
+          <div class="panel-head">
+            <h2>Printer camera</h2>
+            <div class="camera-head-actions">
+              <span class="camera-status" id="cameraStatus" data-state="off">Offline</span>
+              <button class="btn small ghost" id="cameraOpenBtn" type="button" title="Open Creality camera page on printer">Open on printer</button>
+              <button class="btn small ghost" id="cameraReconnectBtn" type="button">Reconnect</button>
+            </div>
+          </div>
+          <div class="camera-box" id="cameraBox">
+            <span class="placeholder" id="cameraPlaceholder">Connect printer on WiFi to view live feed</span>
+            <img id="printerSnapshot" alt="Printer camera snapshot" hidden />
+          </div>
+        </section>
+
+        <section class="panel printer-status-panel" id="printerStatusPanel">
+          <div class="panel-head">
+            <h2>Printer status</h2>
+            <span class="printer-ready-badge" id="printerReadyBadge" data-state="blocked">Checking…</span>
+          </div>
+          <ul class="printer-blockers" id="printerBlockers" hidden></ul>
+          <div class="printer-status-grid" id="printerStatusGrid"></div>
+        </section>
+      </div>
+
+      <section class="panel logs full">
+        <h2>Activity log</h2>
+        <pre id="logOutput">Ready.</pre>
+      </section>
+    </main>
+  </div>
+  <script src="/static/printer-camera.js"></script>
+  <script src="/static/printer-status.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

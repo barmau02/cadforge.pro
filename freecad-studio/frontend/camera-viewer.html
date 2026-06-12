@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Printer camera</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+    video, img, .msg {
+      width: 100%; height: 100%; object-fit: cover; display: block; background: #000;
+    }
+    .msg {
+      display: grid; place-items: center; color: #8fa3c7;
+      font: 13px/1.4 Inter, Segoe UI, sans-serif; text-align: center; padding: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="msg" id="msg">Connecting…</div>
+  <video id="video" autoplay playsinline muted hidden></video>
+  <script>
+    (async () => {
+      const params = new URLSearchParams(location.search);
+      const ip = params.get("ip");
+      const msg = document.getElementById("msg");
+      const video = document.getElementById("video");
+      const CONNECT_TIMEOUT_MS = 18000;
+
+      if (!ip) {
+        msg.textContent = "No printer IP";
+        return;
+      }
+
+      function notify(type, error) {
+        window.parent.postMessage({ type, error: error || null }, "*");
+      }
+
+      function setMsg(text) {
+        msg.hidden = false;
+        msg.textContent = text;
+        video.hidden = true;
+      }
+
+      function showVideo(stream) {
+        msg.hidden = true;
+        video.hidden = false;
+        video.srcObject = stream;
+      }
+
+      function fixCrealitySdp(sdp) {
+        const lines = sdp.replace(/\r\n/g, "\n").split("\n").filter(Boolean);
+        const out = [];
+        let inVideo = false;
+        let videoPt = null;
+        let seenRtpmap = false;
+        let fmtpLines = [];
+        let fmtpInsertAt = 0;
+
+        function flushFmtp() {
+          if (!fmtpLines.length) return;
+          const preferred = fmtpLines.find((line) => line.includes("packetization-mode")) || fmtpLines[0];
+          out.splice(fmtpInsertAt, 0, preferred);
+          fmtpLines = [];
+        }
+
+        for (const line of lines) {
+          if (line.startsWith("m=video")) {
+            flushFmtp();
+            inVideo = true;
+            seenRtpmap = false;
+            fmtpLines = [];
+            const parts = line.split(" ");
+            const payloadTypes = parts.length > 3 ? parts.slice(3) : [];
+            if (payloadTypes.length >= 2 && payloadTypes[0] !== payloadTypes[1]) {
+              videoPt = payloadTypes[1];
+            } else if (payloadTypes.length) {
+              videoPt = payloadTypes[0];
+            } else {
+              videoPt = null;
+            }
+            const next = videoPt ? parts.slice(0, 3).concat([videoPt]) : parts;
+            out.push(next.join(" "));
+            fmtpInsertAt = out.length;
+            continue;
+          }
+
+          if (line.startsWith("m=")) {
+            flushFmtp();
+            inVideo = false;
+            videoPt = null;
+          }
+
+          if (inVideo && videoPt) {
+            if (line.startsWith("a=rtpmap:")) {
+              const pt = line.split(":", 2)[1].split(" ")[0];
+              if (pt !== videoPt || seenRtpmap) continue;
+              seenRtpmap = true;
+            } else if (line.startsWith("a=fmtp:")) {
+              if (line.includes("x-google")) continue;
+              const pt = line.split(":", 2)[1].split(" ")[0];
+              if (pt !== videoPt) continue;
+              fmtpLines.push(line);
+              continue;
+            }
+          }
+
+          if (line === "c=IN IP4 0.0.0.0") {
+            out.push(`c=IN IP4 ${ip}`);
+            continue;
+          }
+
+          out.push(line);
+        }
+
+        flushFmtp();
+        let text = out.join("\r\n");
+        if (!text.endsWith("\r\n")) text += "\r\n";
+        return text;
+      }
+
+      function parseAnswer(text) {
+        const raw = (text || "").trim();
+        if (!raw) throw new Error("Empty answer from printer");
+        let answer;
+        try {
+          answer = JSON.parse(atob(raw));
+        } catch (_) {
+          answer = JSON.parse(raw);
+        }
+        if (answer.type !== "answer" || !answer.sdp) {
+          throw new Error("Printer returned invalid WebRTC answer");
+        }
+        answer.sdp = fixCrealitySdp(answer.sdp);
+        return answer;
+      }
+
+      async function signalOffer(sdp) {
+        const payload = btoa(JSON.stringify({ type: "offer", sdp }));
+        const res = await fetch("/api/printer/camera/webrtc", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ offer: payload }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(data.detail || data.message || `Signaling HTTP ${res.status}`);
+        }
+        return parseAnswer(data.answer);
+      }
+
+      const pc = new RTCPeerConnection({
+        iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+      });
+
+      let connected = false;
+      const failTimer = window.setTimeout(() => {
+        if (connected) return;
+        setMsg("Live stream timed out — using snapshot fallback");
+        notify("camera-failed", "timeout");
+      }, CONNECT_TIMEOUT_MS);
+
+      pc.ontrack = (event) => {
+        connected = true;
+        window.clearTimeout(failTimer);
+        const stream = event.streams[0] || new MediaStream([event.track]);
+        showVideo(stream);
+        notify("camera-live");
+      };
+
+      pc.oniceconnectionstatechange = () => {
+        const state = pc.iceConnectionState;
+        if (state === "connected" || state === "completed") {
+          connected = true;
+          window.clearTimeout(failTimer);
+          notify("camera-live");
+          return;
+        }
+        if (state === "failed") {
+          window.clearTimeout(failTimer);
+          setMsg("Camera connection failed — check printer is on WiFi");
+          notify("camera-failed", "ice-failed");
+        } else if (state === "disconnected") {
+          setMsg("Camera disconnected");
+        }
+      };
+
+      let offerSent = false;
+
+      pc.onicecandidate = async (event) => {
+        if (event.candidate !== null) return;
+        try {
+          if (offerSent) return;
+          offerSent = true;
+          setMsg("Negotiating stream…");
+          const answer = await signalOffer(pc.localDescription.sdp);
+          await pc.setRemoteDescription(answer);
+        } catch (err) {
+          window.clearTimeout(failTimer);
+          setMsg(String(err.message || err));
+          notify("camera-failed", String(err.message || err));
+        }
+      };
+
+      const sendWhenReady = async () => {
+        if (offerSent || !pc.localDescription?.sdp) return;
+        try {
+          offerSent = true;
+          setMsg("Negotiating stream…");
+          const answer = await signalOffer(pc.localDescription.sdp);
+          await pc.setRemoteDescription(answer);
+        } catch (err) {
+          window.clearTimeout(failTimer);
+          setMsg(String(err.message || err));
+          notify("camera-failed", String(err.message || err));
+        }
+      };
+
+      window.setTimeout(() => {
+        void sendWhenReady();
+      }, 2500);
+
+      try {
+        pc.addTransceiver("video", { direction: "sendrecv" });
+        const offer = await pc.createOffer({ offerToReceiveVideo: true });
+        await pc.setLocalDescription(offer);
+      } catch (err) {
+        window.clearTimeout(failTimer);
+        setMsg(String(err.message || err));
+        notify("camera-failed", String(err.message || err));
+      }
+    })();
+  </script>
+</body>
+</html>

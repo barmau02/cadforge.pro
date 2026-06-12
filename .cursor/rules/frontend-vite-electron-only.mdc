@@ -1,0 +1,27 @@
+---
+description: UI work in Vite/Electron desktop app only — never legacy static HTML
+alwaysApply: true
+---
+
+# Frontend: Vite + Electron only
+
+Do not edit the legacy static HTML frontend. All UI features, fixes, and layout changes belong in the desktop app.
+
+## Do not edit
+
+- `freecad-studio/frontend/**` — static HTML, CSS, and JS served by the FastAPI backend
+- Do not add features, fix UI bugs, or refactor in those files even if the backend still serves them
+
+## Edit instead
+
+- `freecad-studio-desktop/src/**` — React UI (Vite)
+- `freecad-studio-desktop/electron/**` — Electron main/preload/process
+- `freecad-studio-desktop/vite.config.ts`, `tsconfig*.json` — Vite/Electron build config
+
+## Vite shell only
+
+- `freecad-studio-desktop/index.html` is the Vite entry shell (`#root` + module script). Prefer `src/` components for UI. Only touch `index.html` for fonts, meta tags, or Vite entry requirements — not for app layout or behavior.
+
+## Backend
+
+- API and server logic stay in `freecad-studio/backend/**`. Do not mirror or duplicate UI work in the static frontend.
