@@ -87,7 +87,7 @@ export function useStudio() {
   const [loopProgress, setLoopProgress] = useState<LoopProgress | null>(null);
   const [featureTree, setFeatureTree] = useState<FeatureTreeResponse | null>(null);
   const [featureTreeLoading, setFeatureTreeLoading] = useState(false);
-  const [logs, setLogs] = useState<string[]>(["PromptForge ready."]);
+  const [logs, setLogs] = useState<string[]>(["CadForge ready."]);
   const [busy, setBusy] = useState(false);
   const [buildPhase, setBuildPhase] = useState<string | null>(null);
   const [section, setSection] = useState<Section>("design");

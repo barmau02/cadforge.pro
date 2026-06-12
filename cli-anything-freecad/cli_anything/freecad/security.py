@@ -1,5 +1,5 @@
 """
-PromptForge security layer for the vendored cli-anything-freecad copy.
+CadForge security layer for the vendored cli-anything-freecad copy.
 
 Enforces path allowlists, command group whitelists, and a pinned FreeCAD binary
 before headless macro execution. Enabled by default in this fork.

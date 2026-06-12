@@ -23,7 +23,7 @@ batch/
 _cli-tmp/
 *.zip
 
-# Large upstream clones (not PromptForge source)
+# Large upstream clones (not CadForge source)
 CLI-Anything-main/
 freecad-mcp-main/
 

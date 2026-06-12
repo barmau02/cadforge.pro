@@ -1,11 +1,11 @@
 {
-  "name": "freecad-studio",
+  "name": "cadforge",
   "version": "1.0.1",
-  "description": "PromptForge — AI concept to printable 3D",
-  "author": "PromptForge",
+  "description": "CadForge — AI concept to printable 3D",
+  "author": "CadForge",
   "repository": {
     "type": "git",
-    "url": "https://github.com/barmau02/promptforge.git"
+    "url": "https://github.com/barmau02/cadforge.pro.git"
   },
   "main": "dist-electron/main.js",
   "type": "module",
@@ -18,8 +18,8 @@
     "preview": "vite preview"
   },
   "build": {
-    "appId": "com.promptforge.app",
-    "productName": "PromptForge",
+    "appId": "com.cadforge.pro",
+    "productName": "CadForge",
     "artifactName": "${productName}-Setup-${version}.${ext}",
     "directories": {
       "output": "release"
@@ -40,7 +40,7 @@
     "publish": {
       "provider": "github",
       "owner": "barmau02",
-      "repo": "promptforge",
+      "repo": "cadforge.pro",
       "releaseType": "release"
     },
     "win": {

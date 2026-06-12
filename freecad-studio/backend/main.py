@@ -85,7 +85,7 @@ CREALITY_PRINT_CANDIDATES = [
 CREALITY_PRINT_DOWNLOAD = "https://github.com/CrealityOfficial/CrealityPrint/releases/latest"
 START_RPC_MACRO = Path(os.environ.get("APPDATA", "")) / "FreeCAD" / "v1-1" / "Macro" / "StartMCPOnly.FCMacro"
 
-app = FastAPI(title="PromptForge", version="1.0.0")
+app = FastAPI(title="CadForge", version="1.0.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -843,8 +843,8 @@ def workflow() -> dict:
     steps = [
         {
             "id": "studio",
-            "title": "PromptForge running",
-            "description": "PromptForge server is online",
+            "title": "CadForge running",
+            "description": "CadForge server is online",
             "status": "done",
             "detail": s["studio_url"],
             "action": None,
@@ -2378,7 +2378,7 @@ def services() -> dict:
     return {
         **snap,
         "items": [
-            {"id": "studio", "name": "PromptForge API", "ok": snap["studio_api"], "detail": "Port 8787"},
+            {"id": "studio", "name": "CadForge API", "ok": snap["studio_api"], "detail": "Port 8787"},
             {
                 "id": "freecad",
                 "name": "FreeCAD",

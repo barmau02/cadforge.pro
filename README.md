@@ -1,6 +1,8 @@
-# PromptForge
+# CadForge
 
 AI concept → 3D model → slice → print on Creality K2.
+
+**Website:** [cadforge.pro](https://cadforge.pro)
 
 ## Structure
 
@@ -27,7 +29,7 @@ npm run electron:dev
 
 ## Deploy website
 
-See [DEPLOY.md](DEPLOY.md) — connect this repo to Hostinger Git with directory `public_html`.
+See [DEPLOY.md](DEPLOY.md) — connect this repo to Hostinger Git with directory `public_html` for **cadforge.pro**.
 
 ## License
 

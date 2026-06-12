@@ -1,10 +1,10 @@
-# 3D CAD Skills & Repos for PromptForge
+# 3D CAD Skills & Repos for CadForge
 
 Research summary for improving AI → FreeCAD Python generation.
 
 ## Recommended skills to adopt
 
-| Repo / skill | URL | Use in PromptForge |
+| Repo / skill | URL | Use in CadForge |
 |--------------|-----|-------------------|
 | **FreeCAD MCP** | https://github.com/neka-nat/freecad-mcp | RPC patterns, `execute_code`, screenshots, object serialization (already integrated) |
 | **CadQuery** | https://github.com/CadQuery/cadquery | Alternative parametric API; good LLM examples for boxes, holes, fillets |

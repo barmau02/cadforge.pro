@@ -86,7 +86,7 @@ export function TopBar({
                 className="btn btn-compact btn-ghost"
                 disabled={updaterChecking}
                 onClick={onCheckUpdates}
-                title="Check for PromptForge updates"
+                title="Check for CadForge updates"
               >
                 <IconRefresh size={15} />
                 {updaterChecking ? "Checking…" : "Check for updates"}

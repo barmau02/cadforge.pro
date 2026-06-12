@@ -8,7 +8,7 @@ Open-source skill repos used to guide this rebuild:
 | **UI/UX Pro Max** | https://github.com/nextlevelbuilder/ui-ux-pro-max-skill | Color systems, spacing, accessibility, React patterns, 99 UX rules |
 | **Awesome Claude Skills** | https://github.com/ComposioHQ/awesome-claude-skills | Curated index of agent skills |
 
-## Design system (PromptForge)
+## Design system (CadForge)
 
 - **Style**: Industrial utilitarian — CAD/manufacturing tool
 - **Fonts**: Outfit (UI) + IBM Plex Mono (code)

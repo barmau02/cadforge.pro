@@ -1,4 +1,4 @@
-"""PromptForge end-to-end API tests."""
+"""CadForge end-to-end API tests."""
 from __future__ import annotations
 
 import json
@@ -51,7 +51,7 @@ def fail_detail(code: int, payload: dict) -> str:
 
 
 def main() -> int:
-    print("PromptForge E2E tests")
+    print("CadForge E2E tests")
     print("=" * 50)
 
     if not wait_for_api(5):

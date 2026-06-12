@@ -1,6 +1,6 @@
-# PromptForge — sanitized cli-anything-freecad
+# CadForge — sanitized cli-anything-freecad
 
-Headless FreeCAD batch CLI with security checks. Sidecar to PromptForge (does not replace MCP or the desktop app).
+Headless FreeCAD batch CLI with security checks. Sidecar to CadForge (does not replace MCP or the desktop app).
 
 ## Install
 

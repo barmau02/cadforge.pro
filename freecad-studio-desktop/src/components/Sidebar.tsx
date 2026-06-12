@@ -28,7 +28,7 @@ export function Sidebar({
           <IconBox size={20} />
         </div>
         <div>
-          <div className="sidebar-title">PromptForge</div>
+          <div className="sidebar-title">CadForge</div>
           <div className="sidebar-tagline">Concept to print</div>
         </div>
       </div>

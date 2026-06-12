@@ -1,4 +1,4 @@
-"""PromptForge job manager — one FreeCAD document per design job."""
+"""CadForge job manager — one FreeCAD document per design job."""
 from __future__ import annotations
 
 import json

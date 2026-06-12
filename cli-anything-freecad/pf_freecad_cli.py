@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PromptForge secure entry point for cli-anything-freecad.
+CadForge secure entry point for cli-anything-freecad.
 
 Always runs argv and path checks before delegating to the upstream CLI.
 Install: pip install -e .  then use: pf-freecad-cli --json ...

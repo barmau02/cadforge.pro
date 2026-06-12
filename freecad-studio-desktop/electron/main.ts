@@ -55,7 +55,7 @@ function createWindow() {
     height: 860,
     minWidth: 960,
     minHeight: 640,
-    title: "PromptForge",
+    title: "CadForge",
     backgroundColor: "#000000",
     autoHideMenuBar: true,
     webPreferences: {

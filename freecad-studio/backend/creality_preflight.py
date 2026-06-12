@@ -188,7 +188,7 @@ def _snapshot_issues(snapshot: dict) -> tuple[list[str], list[str]]:
         name = print_file.rsplit("/", 1)[-1] or print_file
         warnings.append(
             f"Printer is idle (screen may show {name!r} with 0 layers — normal until a print starts). "
-            "Send uploads and starts your current slice from PromptForge."
+            "Send uploads and starts your current slice from CadForge."
         )
 
     return blockers, warnings

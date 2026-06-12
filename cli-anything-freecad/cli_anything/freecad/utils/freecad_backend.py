@@ -72,7 +72,7 @@ def find_freecad(gui_required: bool = False) -> str:
         If FreeCAD cannot be found, with installation instructions in
         the message.
     """
-    # PF-SEC: prefer pinned PromptForge binary when secure mode is on.
+    # PF-SEC: prefer pinned CadForge binary when secure mode is on.
     try:
         from cli_anything.freecad.security import audit_enabled, validate_frecad_executable
 

@@ -1,4 +1,4 @@
-# PromptForge — copy to config.toml and adjust for your machine
+# CadForge — copy to config.toml and adjust for your machine
 freecad_mode = "headless"
 vision_capture = "auto"
 background_freecad = true

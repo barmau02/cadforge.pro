@@ -1,6 +1,6 @@
-# Deploy PromptForge website via Hostinger Git
+# Deploy CadForge website via Hostinger Git
 
-Hostinger **Git** clones your GitHub repo into `public_html`. The landing page lives at the **repo root** (`index.html`, `styles.css`) so it becomes your domain homepage.
+Hostinger **Git** clones your GitHub repo into `public_html`. The landing page lives at the **repo root** (`index.html`, `styles.css`) so it becomes **cadforge.pro**.
 
 The desktop app and FreeCAD backend stay on your PC — the website is a download/info page only.
 
@@ -9,28 +9,28 @@ The desktop app and FreeCAD backend stay on your PC — the website is a downloa
 ```powershell
 cd c:\Users\mauri\forgeprompt
 gh auth login
-git remote add origin https://github.com/barmau02/promptforge.git
+git remote add origin https://github.com/barmau02/cadforge.pro.git
 git push -u origin main
 ```
 
 If the repo does not exist yet:
 
 ```powershell
-gh repo create barmau02/promptforge --public --source=. --remote=origin --push
+gh repo create barmau02/cadforge.pro --public --source=. --remote=origin --push
 ```
 
-## 2. Map Git to your webpage (Hostinger hPanel)
+## 2. Map Git to cadforge.pro (Hostinger hPanel)
 
-1. Open **hPanel** → **Websites** → your domain → **Git** (under Advanced).
+1. Open **hPanel** → **Websites** → **cadforge.pro** → **Git** (under Advanced).
 2. Click **Create repository** (or **Connect GitHub**).
-3. Authorize GitHub and choose **`barmau02/promptforge`**.
+3. Authorize GitHub and choose **`barmau02/cadforge.pro`**.
 4. Set:
    - **Branch:** `main`
    - **Directory / install path:** `public_html` (default — your main website root)
 5. Click **Deploy**.
 6. Turn on **Auto-deployment** so each `git push` updates the live site.
 
-After deploy, open your domain — you should see the PromptForge landing page.
+After deploy, open **https://cadforge.pro** — you should see the CadForge landing page.
 
 ## 3. How it works
 
@@ -51,7 +51,7 @@ cd freecad-studio-desktop
 npm run electron:publish
 ```
 
-The website links to `https://github.com/barmau02/promptforge/releases/latest`.
+The website links to `https://github.com/barmau02/cadforge.pro/releases/latest`.
 
 ## Troubleshooting
 

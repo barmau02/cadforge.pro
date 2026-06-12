@@ -9,7 +9,7 @@ from freecad_client import FreeCADClient
 
 
 class HeadlessCad:
-    """Subset of FreeCADClient used by PromptForge when freecad_mode=headless."""
+    """Subset of FreeCADClient used by CadForge when freecad_mode=headless."""
 
     def __init__(self, job_id: str | None = None):
         self._job_id = job_id

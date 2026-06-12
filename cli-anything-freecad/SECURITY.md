@@ -1,4 +1,4 @@
-# Security — PromptForge vendored cli-anything-freecad
+# Security — CadForge vendored cli-anything-freecad
 
 This directory is a **sanitized private copy** of
 [HKUDS/CLI-Anything `freecad/agent-harness`](https://github.com/HKUDS/CLI-Anything)
@@ -36,7 +36,7 @@ Do **not** call `cli-anything-freecad` directly unless you disable checks (`PF_S
 
 ## What is NOT sandboxed
 
-- Generated FreeCAD Python macros still run with **your user privileges** inside `FreeCADCmd` — same risk class as PromptForge `execute_code`.
+- Generated FreeCAD Python macros still run with **your user privileges** inside `FreeCADCmd` — same risk class as CadForge `execute_code`.
 - Untrusted STEP files can still contain malicious geometry; only import from `PF_IMPORT_ROOT`.
 
 ## Disabling checks (debug only)

@@ -5,10 +5,10 @@ from setuptools import setup, find_namespace_packages
 setup(
     name="cli-anything-freecad-pf",
     version="1.0.0+pf1",
-    description="PromptForge sanitized CLI harness for FreeCAD (headless batch)",
+    description="CadForge sanitized CLI harness for FreeCAD (headless batch)",
     long_description=open("cli_anything/freecad/README.md").read(),
     long_description_content_type="text/markdown",
-    author="CLI-Anything Contributors (PromptForge fork)",
+    author="CLI-Anything Contributors (CadForge fork)",
     license="Apache-2.0",
     packages=find_namespace_packages(include=["cli_anything.*"]),
     py_modules=["pf_freecad_cli"],

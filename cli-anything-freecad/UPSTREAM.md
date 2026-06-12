@@ -5,7 +5,7 @@
 - **License:** Apache-2.0
 - **Vendored:** 2026-06-10 (main branch, 36 files)
 
-## PromptForge changes
+## CadForge changes
 
 1. `cli_anything/freecad/security.py` — path/command allowlists
 2. `cli_anything/freecad/utils/freecad_backend.py` — `# PF-SEC` hooks
