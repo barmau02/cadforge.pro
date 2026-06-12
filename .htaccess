@@ -1,0 +1,8 @@
+Options -Indexes
+
+# Monorepo: Hostinger Git clones the full repo into public_html.
+# Block direct HTTP access to app source folders.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^(\.git|\.github|\.cursor|freecad-studio|freecad-studio-desktop|cli-anything-freecad)(/|$) - [F,L]
+</IfModule>

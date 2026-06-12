@@ -6,10 +6,10 @@ AI concept → 3D model → slice → print on Creality K2.
 
 | Path | Purpose |
 |------|---------|
+| `index.html`, `styles.css` | Public landing page (Hostinger Git → `public_html`) |
 | `freecad-studio/backend/` | FastAPI API, FreeCAD headless, slicing |
 | `freecad-studio-desktop/` | Vite + React + Electron desktop app |
 | `cli-anything-freecad/` | Batch FreeCAD CLI sidecar |
-| `website/` | Static landing page (Hostinger) |
 
 ## Quick start (local)
 
@@ -27,7 +27,7 @@ npm run electron:dev
 
 ## Deploy website
 
-See [DEPLOY.md](DEPLOY.md) for Hostinger + GitHub setup.
+See [DEPLOY.md](DEPLOY.md) — connect this repo to Hostinger Git with directory `public_html`.
 
 ## License
 

@@ -1,8 +1,10 @@
-# Deploy PromptForge to Hostinger via GitHub
+# Deploy PromptForge website via Hostinger Git
 
-Hostinger shared hosting serves **static websites** (HTML/CSS). The PromptForge **desktop app** and **FreeCAD backend** run on your PC — the website is a landing page with download links.
+Hostinger **Git** clones your GitHub repo into `public_html`. The landing page lives at the **repo root** (`index.html`, `styles.css`) so it becomes your domain homepage.
 
-## 1. Push code to GitHub
+The desktop app and FreeCAD backend stay on your PC — the website is a download/info page only.
+
+## 1. Push to GitHub
 
 ```powershell
 cd c:\Users\mauri\forgeprompt
@@ -11,42 +13,48 @@ git remote add origin https://github.com/barmau02/promptforge.git
 git push -u origin main
 ```
 
-Create the repo on GitHub first if it does not exist (`gh repo create barmau02/promptforge --public --source=. --remote=origin`).
+If the repo does not exist yet:
 
-## 2. Option A — Hostinger Git (easiest)
+```powershell
+gh repo create barmau02/promptforge --public --source=. --remote=origin --push
+```
 
-1. Log in to **hPanel** → your domain → **Git**.
-2. Connect **GitHub** and select `barmau02/promptforge`, branch `main`.
-3. Set **Deploy path** to `website/` (or copy `website/*` into `public_html` after clone).
-4. Enable **Auto deployment** on push.
+## 2. Map Git to your webpage (Hostinger hPanel)
 
-## 3. Option B — GitHub Actions (FTP)
+1. Open **hPanel** → **Websites** → your domain → **Git** (under Advanced).
+2. Click **Create repository** (or **Connect GitHub**).
+3. Authorize GitHub and choose **`barmau02/promptforge`**.
+4. Set:
+   - **Branch:** `main`
+   - **Directory / install path:** `public_html` (default — your main website root)
+5. Click **Deploy**.
+6. Turn on **Auto-deployment** so each `git push` updates the live site.
 
-In GitHub → **Settings → Secrets and variables → Actions**, add:
+After deploy, open your domain — you should see the PromptForge landing page.
 
-| Secret | Example |
-|--------|---------|
-| `HOSTINGER_FTP_HOST` | `ftp.yourdomain.com` |
-| `HOSTINGER_FTP_USERNAME` | from hPanel → FTP Accounts |
-| `HOSTINGER_FTP_PASSWORD` | FTP password |
-| `HOSTINGER_FTP_PATH` | `./public_html/` (optional) |
+## 3. How it works
 
-Find FTP details in hPanel → **Files → FTP Accounts**.
-
-Every push to `main` that changes `website/` runs `.github/workflows/deploy-hostinger.yml` and uploads the site.
+| Repo path | On Hostinger | Served? |
+|-----------|--------------|---------|
+| `index.html` | `public_html/index.html` | Yes — homepage |
+| `styles.css` | `public_html/styles.css` | Yes |
+| `.htaccess` | `public_html/.htaccess` | Blocks web access to source folders |
+| `freecad-studio/` | `public_html/freecad-studio/` | Blocked by `.htaccess` |
+| `freecad-studio-desktop/` | `public_html/freecad-studio-desktop/` | Blocked by `.htaccess` |
 
 ## 4. Desktop app releases
 
-Build and publish the Windows installer separately:
+Publish the Windows installer to GitHub Releases (not Hostinger):
 
 ```powershell
 cd freecad-studio-desktop
 npm run electron:publish
 ```
 
-GitHub Releases hosts the `.exe` installer; the website links to `releases/latest`.
+The website links to `https://github.com/barmau02/promptforge/releases/latest`.
 
-## What does not run on Hostinger
+## Troubleshooting
 
-- FastAPI backend (needs Python + FreeCAD on a VPS, not basic shared hosting)
-- Electron desktop app (download from GitHub Releases)
+- **404 or wrong page:** Confirm Git directory is `public_html`, branch is `main`, and `index.html` is at the repo root.
+- **Old content after push:** In hPanel Git, click **Deploy** again or check auto-deploy is enabled.
+- **Source folders visible:** Ensure `.htaccess` was deployed; Hostinger Apache must allow `mod_rewrite`.
