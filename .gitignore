@@ -17,6 +17,10 @@ freecad-studio/config.toml
 # Job runtime data
 freecad-studio/jobs/*.json
 freecad-studio/jobs/_render_test/
+freecad-studio/jobs/model_memory.db
+freecad-studio/jobs/**/PF_*.FCStd
+freecad-studio/jobs/**/PF_*.FCBak
+freecad-studio/jobs/**/renders/
 
 # Local batch / scratch
 batch/
