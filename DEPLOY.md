@@ -1,74 +1,55 @@
-# Deploy CadForge website via Hostinger Git
+# Deploy cadforge.pro with GitHub Pages
 
-Hostinger **Git** clones your GitHub repo into `public_html`. The landing page lives at the **repo root** (`index.html`, `styles.css`) so it becomes **cadforge.pro**.
+**Code** lives on GitHub. **Hosting** is free via GitHub Pages. **Domain** DNS stays at Hostinger.
 
-The desktop app and FreeCAD backend stay on your PC — the website is a download/info page only.
+## 1. GitHub Pages (automatic)
 
-## 1. Push to GitHub
+Pushes to `main` that change `index.html` or `styles.css` run `.github/workflows/github-pages.yml`.
 
-```powershell
-cd c:\Users\mauri\forgeprompt
-gh auth login
-git remote add origin https://github.com/barmau02/cadforge.pro.git
-git push -u origin main
-```
+Live URLs after DNS is configured:
 
-If the repo does not exist yet:
+- https://cadforge.pro
+- https://barmau02.github.io/cadforge.pro/
 
-```powershell
-gh repo create barmau02/cadforge.pro --public --source=. --remote=origin --push
-```
+## 2. Point Hostinger DNS to GitHub
 
-## 2. Map Git to cadforge.pro (Hostinger hPanel)
+hPanel → **Domains** → **cadforge.pro** → **DNS / DNS Zone**
 
-1. Open **hPanel** → **Websites** → **cadforge.pro** → **Git** (under Advanced).
-2. Click **Create repository** (or **Connect GitHub**).
-3. Authorize GitHub and choose **`barmau02/cadforge.pro`**.
-4. Set:
-   - **Branch:** `main`
-   - **Directory / install path:** `public_html` (default — your main website root)
-5. Click **Deploy**.
-6. Turn on **Auto-deployment** so each `git push` updates the live site.
+Remove **parking** records. Add:
 
-After deploy, open **https://cadforge.pro** — you should see the CadForge landing page.
+### A records (apex `@` → GitHub Pages)
 
-## 3. How it works
+| Type | Name | Points to |
+|------|------|-----------|
+| A | @ | 185.199.108.153 |
+| A | @ | 185.199.109.153 |
+| A | @ | 185.199.110.153 |
+| A | @ | 185.199.111.153 |
 
-| Repo path | On Hostinger | Served? |
-|-----------|--------------|---------|
-| `index.html` | `public_html/index.html` | Yes — homepage |
-| `styles.css` | `public_html/styles.css` | Yes |
-| `.htaccess` | `public_html/.htaccess` | Blocks web access to source folders |
-| `freecad-studio/` | `public_html/freecad-studio/` | Blocked by `.htaccess` |
-| `freecad-studio-desktop/` | `public_html/freecad-studio-desktop/` | Blocked by `.htaccess` |
+### CNAME (optional, for www)
 
-## 4. Desktop app releases
+| Type | Name | Points to |
+|------|------|-----------|
+| CNAME | www | barmau02.github.io |
 
-Publish the Windows installer to GitHub Releases (not Hostinger):
+DNS can take up to 24 hours (often minutes).
+
+In GitHub → repo **Settings → Pages → Custom domain**, enter `cadforge.pro` and enable **Enforce HTTPS** when available.
+
+## 3. Verify
+
+Open https://cadforge.pro — title should be **CadForge — Concept to Print**, not Hostinger parked domain.
+
+## Desktop app
+
+Publish the Windows installer to GitHub Releases (not Pages):
 
 ```powershell
 cd freecad-studio-desktop
 npm run electron:publish
 ```
 
-The website links to `https://github.com/barmau02/cadforge.pro/releases/latest`.
+## What does not run on GitHub Pages
 
-## 5. Hostinger API deploy (optional)
-
-For push-to-deploy without hPanel Git:
-
-1. Copy `.env.example` to `.env` and set `HOSTINGER_API_TOKEN` (from hPanel → Profile → API).
-2. **Never commit `.env`** — it is gitignored.
-3. Run:
-
-```powershell
-.\scripts\deploy-hostinger.ps1
-```
-
-Or add `HOSTINGER_API_TOKEN` as a GitHub Actions secret — pushes to `main` that change site files run `.github/workflows/deploy-hostinger.yml`.
-
-## Troubleshooting
-
-- **404 or wrong page:** Confirm Git directory is `public_html`, branch is `main`, and `index.html` is at the repo root.
-- **Old content after push:** In hPanel Git, click **Deploy** again or check auto-deploy is enabled.
-- **Source folders visible:** Ensure `.htaccess` was deployed; Hostinger Apache must allow `mod_rewrite`.
+- FastAPI backend / FreeCAD (local desktop app only)
+- Electron app (download from Releases)
