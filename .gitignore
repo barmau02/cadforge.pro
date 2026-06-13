@@ -10,7 +10,9 @@
 
 # Secrets & local config
 **/.env
+**/.env.local
 **/.env.*
+!.env.example
 freecad-studio/jobs/secrets.db
 freecad-studio/config.toml
 

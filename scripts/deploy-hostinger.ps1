@@ -4,17 +4,17 @@ $ErrorActionPreference = "Stop"
 Set-Location (Join-Path $PSScriptRoot "..")
 
 function Get-EnvValue([string]$Name) {
-  if ([string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable($Name))) {
-    $envFile = Join-Path (Get-Location) ".env"
-    if (Test-Path $envFile) {
-      Get-Content $envFile | ForEach-Object {
-        if ($_ -match "^\s*$Name\s*=\s*(.+)\s*$") {
-          return $Matches[1].Trim()
-        }
+  $direct = [Environment]::GetEnvironmentVariable($Name)
+  if (-not [string]::IsNullOrWhiteSpace($direct)) { return $direct.Trim() }
+  $envFile = Join-Path (Get-Location) ".env"
+  if (Test-Path $envFile) {
+    foreach ($line in Get-Content $envFile) {
+      if ($line -match "^\s*$Name\s*=\s*(.+)\s*$") {
+        return $Matches[1].Trim().Trim('"').Trim("'")
       }
     }
   }
-  return [Environment]::GetEnvironmentVariable($Name)
+  return ""
 }
 
 $token = Get-EnvValue "HOSTINGER_API_TOKEN"
@@ -33,9 +33,10 @@ $headers = @{
 
 Write-Host "Looking up website $domain..."
 $sites = Invoke-RestMethod -Uri "$base/api/hosting/v1/websites?domain=$domain" -Headers $headers -Method Get
-$site = $sites.data | Where-Object { $_.domain -eq $domain } | Select-Object -First 1
+$site = $sites.data | Where-Object { ($_.domain -as [string]).Trim() -eq $domain } | Select-Object -First 1
 if (-not $site) {
-  Write-Error "Website '$domain' not found on this Hostinger account."
+  $available = ($sites.data | ForEach-Object { $_.domain }) -join ", "
+  Write-Error "Website '$domain' not found. Available: $available"
 }
 $username = $site.username
 Write-Host "Using hosting account: $username"
