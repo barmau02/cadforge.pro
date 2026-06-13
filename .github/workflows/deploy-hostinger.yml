@@ -1,0 +1,25 @@
+name: Deploy cadforge.pro to Hostinger
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "styles.css"
+      - ".htaccess"
+      - "scripts/deploy-hostinger.ps1"
+      - ".github/workflows/deploy-hostinger.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy static site via Hostinger API
+        shell: pwsh
+        env:
+          HOSTINGER_API_TOKEN: ${{ secrets.HOSTINGER_API_TOKEN }}
+          HOSTINGER_DOMAIN: cadforge.pro
+        run: ./scripts/deploy-hostinger.ps1

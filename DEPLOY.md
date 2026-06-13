@@ -53,6 +53,20 @@ npm run electron:publish
 
 The website links to `https://github.com/barmau02/cadforge.pro/releases/latest`.
 
+## 5. Hostinger API deploy (optional)
+
+For push-to-deploy without hPanel Git:
+
+1. Copy `.env.example` to `.env` and set `HOSTINGER_API_TOKEN` (from hPanel → Profile → API).
+2. **Never commit `.env`** — it is gitignored.
+3. Run:
+
+```powershell
+.\scripts\deploy-hostinger.ps1
+```
+
+Or add `HOSTINGER_API_TOKEN` as a GitHub Actions secret — pushes to `main` that change site files run `.github/workflows/deploy-hostinger.yml`.
+
 ## Troubleshooting
 
 - **404 or wrong page:** Confirm Git directory is `public_html`, branch is `main`, and `index.html` is at the repo root.
